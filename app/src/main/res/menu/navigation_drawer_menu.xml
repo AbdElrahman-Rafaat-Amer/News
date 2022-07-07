@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/home"
+        android:title="@string/home" />
+
+    <item
+        android:id="@+id/sport"
+        android:icon="@drawable/sports"
+        android:title="@string/sport" />
+
+    <item
+        android:id="@+id/science"
+        android:icon="@drawable/science"
+        android:title="@string/science" />
+
+    <item
+        android:id="@+id/business"
+        android:icon="@drawable/business"
+        android:title="@string/business" />
+
+    <item
+        android:id="@+id/health"
+        android:icon="@drawable/heart"
+        android:title="@string/health" />
+
+    <item
+        android:id="@+id/entertainment"
+        android:icon="@drawable/entertainment"
+        android:title="@string/entertainment" />
+
+    <item
+        android:id="@+id/setting"
+        android:icon="@drawable/settings"
+        android:title="@string/setting" />
+
+</menu>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">الأخبار</string>
+    <string name="home"> الرئيسية</string>
+    <string name="sport"> الرياضة</string>
+    <string name="science"> العلوم</string>
+    <string name="health"> الصحة</string>
+    <string name="business">الأعمال</string>
+    <string name="entertainment"> الترفيه</string>
+    <string name="search_now">ادخل كلمات البحث</string>
+    <string name="news_image">صورة الخبر</string>
+    <string name="source_name">اسم المصدر</string>
+    <string name="news_data">تفاصيل الخبر</string>
+    <string name="news_title">اسم الخبر</string>
+    <string name="author">الكاتب</string>
+    <string name="description">الوصف</string>
+    <string name="unknown">غير معروف</string>
+    <string name="enable_connection">إعادة الإتصال</string>
+    <string name="no_data_found">   لا يوجد اخبار تخص هذا البحث \n\n جرب كلمة بحث اخري </string>
+    <string name="setting">الإعدادت</string>
+    <string name="country">الدولة</string>
+    <string name="sortBy">ترتيب الأخبار</string>
+    <string name="language">لغة الأخبار</string>
+
+</resources>

@@ -1,0 +1,26 @@
+package com.abdelrahman.rafaat.myapplication.network
+
+import com.abdelrahman.rafaat.myapplication.model.NewsModel
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Query
+
+interface NewsService {
+
+    @GET("top-headlines")
+    suspend fun getNewsBYCountry(
+        @Query("country") country: String = "",
+        @Query("category") category: String = "general",
+        @Query("sortBy") sortBy: String = "publishedAt",
+        @Query("page") page: String = "1",
+        @Query("apiKey") apiKey: String = "409167f816754aae80fb870a798d92c8"
+    ): Response<NewsModel>
+
+    @GET("everything")
+    suspend fun getNews(
+        @Query("q") q: String,
+        @Query("sortBy") sortBy: String = "publishedAt",
+        @Query("page") page: String = "1",
+        @Query("apiKey") apiKey: String = "409167f816754aae80fb870a798d92c8"
+    ): Response<NewsModel>
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/drawable/ic_background_button.xml" value="0.1795" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/drawable/ic_button_background.xml" value="0.1795" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/drawable/ic_menu_camera.xml" value="0.1795" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/drawable/search_view_background.xml" value="0.1795" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/activity_setting.xml" value="0.25616698292220114" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/activity_splash.xml" value="0.22780797101449277" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/content_main.xml" value="0.22780797101449277" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/custome_row_home.xml" value="0.27447916666666666" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/fragment_business.xml" value="0.1334853090172239" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/fragment_entertainment.xml" value="0.22780797101449277" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/fragment_health.xml" value="0.22780797101449277" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/fragment_home.xml" value="0.264" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/fragment_science.xml" value="0.22780797101449277" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/fragment_setting.xml" value="0.27447916666666666" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/fragment_sport.xml" value="0.22780797101449277" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/navigation_header.xml" value="0.27447916666666666" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/no_connection_view.xml" value="0.27447916666666666" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/no_data_view.xml" value="0.4" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/shimmer_animation_layout.xml" value="0.2" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/shimmer_placeholder_layout.xml" value="0.27447916666666666" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/menu/activity_main_drawer.xml" value="0.1265625" />
+        <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/menu/navigation_drawer_menu.xml" value="0.264" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
