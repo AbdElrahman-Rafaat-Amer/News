@@ -13,6 +13,6 @@
 - MVVM Architecture design pattern.
 - kotlin coroutines
 - Retrofit
-- Glide (image loading).
-- Shimmer (views loading library).
-- Retrofit.
+- <a href="https://newsapi.org/">NewsAPI</a>.
+- <a href="https://github.com/facebook/shimmer-android">Shimmer</a> (views loading library).
+- <a href="https://github.com/bumptech/glide">Glide</a> (image loading).
