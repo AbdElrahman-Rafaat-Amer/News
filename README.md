@@ -6,6 +6,7 @@
 - Displays general news for all categories.
 - Display news for specific category user can select from.
 - Enable User to open article URL on the browser.
+- The user can search about news over all the world
 
 
 # Tools & Libraries
