@@ -1,4 +1,4 @@
-package com.abdelrahman.rafaat.myapplication.mainscreen.view
+package com.abdelrahman.rafaat.myapplication.ui.mainscreen.view
 
 import android.content.Context
 import android.content.Intent

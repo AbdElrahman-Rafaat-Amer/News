@@ -1,15 +1,11 @@
-package com.abdelrahman.rafaat.myapplication.mainscreen.view
+package com.abdelrahman.rafaat.myapplication.ui.mainscreen.view
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.abdelrahman.rafaat.myapplication.business.BusinessFragment
-import com.abdelrahman.rafaat.myapplication.entertainment.EntertainmentFragment
-import com.abdelrahman.rafaat.myapplication.health.HealthFragment
-import com.abdelrahman.rafaat.myapplication.home.HomeFragment
-import com.abdelrahman.rafaat.myapplication.science.ScienceFragment
-import com.abdelrahman.rafaat.myapplication.sport.SportFragment
+import com.abdelrahman.rafaat.myapplication.ui.fragments.*
+
 
 class ViewPagerAdapter(
     lifecycle: Lifecycle,

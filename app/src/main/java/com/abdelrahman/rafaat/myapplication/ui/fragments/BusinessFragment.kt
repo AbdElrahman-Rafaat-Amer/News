@@ -1,4 +1,4 @@
-package com.abdelrahman.rafaat.myapplication.home
+package com.abdelrahman.rafaat.myapplication.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -8,16 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.ViewModelProvider
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.abdelrahman.rafaat.myapplication.R
-import com.abdelrahman.rafaat.myapplication.mainscreen.view.NewsRecyclerAdapter
-import com.abdelrahman.rafaat.myapplication.mainscreen.viewmodel.MainActivityFactory
-import com.abdelrahman.rafaat.myapplication.mainscreen.viewmodel.MainActivityViewModel
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.view.NewsRecyclerAdapter
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.viewmodel.MainActivityFactory
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.viewmodel.MainActivityViewModel
 import com.abdelrahman.rafaat.myapplication.model.Repository
 import com.abdelrahman.rafaat.myapplication.network.NewsClient
 import com.abdelrahman.rafaat.myapplication.utils.ConnectionLiveData
@@ -26,15 +25,12 @@ import com.airbnb.lottie.LottieAnimationView
 import com.facebook.shimmer.ShimmerFrameLayout
 import kotlin.math.round
 
-private const val TAG = "HomeFragment"
+private const val TAG = "BusinessFragment"
 
-class HomeFragment : Fragment() {
+class BusinessFragment : Fragment() {
 
-    /*   @BindView(R.id.search_view)
-       lateinit var searchView: SearchView*/
-
-    @BindView(R.id.home_recyclerview)
-    lateinit var homeRecyclerview: RecyclerView
+    @BindView(R.id.business_recyclerview)
+    lateinit var businessRecyclerview: RecyclerView
 
     @BindView(R.id.swipe_refresh_layout)
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -51,7 +47,9 @@ class HomeFragment : Fragment() {
     @BindView(R.id.no_data_view)
     lateinit var noDataView: View
 
+
     private val adapter = NewsRecyclerAdapter()
+
 
     private lateinit var viewModelFactory: MainActivityFactory
     private lateinit var viewModel: MainActivityViewModel
@@ -63,7 +61,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_business, container, false)
         ButterKnife.bind(this, view)
         return view
     }
@@ -81,6 +79,7 @@ class HomeFragment : Fragment() {
             connectInternet(requireContext())
         }
 
+
     }
 
     private fun checkConnection() {
@@ -90,21 +89,21 @@ class HomeFragment : Fragment() {
                 shimmerFrameLayout.startShimmerAnimation()
                 noInternetAnimation.visibility = View.GONE
                 enableConnection.visibility = View.GONE
-                viewModel.getNews(page)
+                viewModel.getBusiness(page)
             } else {
                 shimmerFrameLayout.visibility = View.GONE
                 shimmerFrameLayout.stopShimmerAnimation()
                 noInternetAnimation.visibility = View.VISIBLE
                 enableConnection.visibility = View.VISIBLE
+                swipeRefreshLayout.visibility = View.GONE
             }
         }
     }
 
     private fun initRecyclerView() {
-        homeRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-        homeRecyclerview.adapter = adapter
-
-        homeRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        businessRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        businessRecyclerview.adapter = adapter
+        businessRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
@@ -113,7 +112,7 @@ class HomeFragment : Fragment() {
                     Log.i(TAG, "observeViewModel: page------------------------> $page")
                     if (page < pageNumbers && page < 6) {
                         page++
-                        viewModel.getNews(page)
+                        viewModel.getBusiness(page)
                     } else {
                         Log.i(TAG, "onScrollStateChanged: page--------------> ")
                     }
@@ -127,9 +126,8 @@ class HomeFragment : Fragment() {
     private fun initViewModel() {
         viewModelFactory = MainActivityFactory(
             Repository.getNewsClient(
-                NewsClient.getNewsClient(),
-                PreferenceManager.getDefaultSharedPreferences(requireActivity())
-            )
+                NewsClient.getNewsClient(), requireActivity().application
+            ), requireActivity().application
         )
 
         viewModel = ViewModelProvider(
@@ -139,31 +137,32 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.news.observe(viewLifecycleOwner) {
+        viewModel.business.observe(viewLifecycleOwner) {
             if (it.articles.isEmpty()) {
-                homeRecyclerview.visibility = View.GONE
+                businessRecyclerview.visibility = View.GONE
                 swipeRefreshLayout.visibility = View.GONE
                 adapter.setList(emptyList())
                 noDataView.visibility = View.VISIBLE
             } else {
                 pageNumbers = round(it.totalResults.toDouble() / 100).toInt()
                 Log.i(TAG, "observeViewModel: pageNumbers-----------------> $pageNumbers")
-                homeRecyclerview.visibility = View.VISIBLE
+                businessRecyclerview.visibility = View.VISIBLE
                 swipeRefreshLayout.visibility = View.VISIBLE
                 adapter.setList(it.articles)
                 noDataView.visibility = View.GONE
             }
+            swipeRefreshLayout.isRefreshing = false
             shimmerFrameLayout.visibility = View.GONE
             shimmerFrameLayout.stopShimmerAnimation()
-            swipeRefreshLayout.isRefreshing = false
         }
     }
 
     private fun refresh() {
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getNews(1)
+            viewModel.getBusiness(1)
             swipeRefreshLayout.isRefreshing = true
         }
         swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor, null))
     }
+
 }

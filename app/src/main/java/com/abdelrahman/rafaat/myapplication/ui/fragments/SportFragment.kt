@@ -1,4 +1,4 @@
-package com.abdelrahman.rafaat.myapplication.entertainment
+package com.abdelrahman.rafaat.myapplication.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -8,16 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.ViewModelProvider
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.abdelrahman.rafaat.myapplication.R
-import com.abdelrahman.rafaat.myapplication.mainscreen.view.NewsRecyclerAdapter
-import com.abdelrahman.rafaat.myapplication.mainscreen.viewmodel.MainActivityFactory
-import com.abdelrahman.rafaat.myapplication.mainscreen.viewmodel.MainActivityViewModel
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.view.NewsRecyclerAdapter
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.viewmodel.MainActivityFactory
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.viewmodel.MainActivityViewModel
 import com.abdelrahman.rafaat.myapplication.model.Repository
 import com.abdelrahman.rafaat.myapplication.network.NewsClient
 import com.abdelrahman.rafaat.myapplication.utils.ConnectionLiveData
@@ -26,12 +25,12 @@ import com.airbnb.lottie.LottieAnimationView
 import com.facebook.shimmer.ShimmerFrameLayout
 import kotlin.math.round
 
-private const val TAG = "EntertainmentFragment"
+private const val TAG = "SportFragment"
 
-class EntertainmentFragment : Fragment() {
+class SportFragment : Fragment() {
 
-    @BindView(R.id.entertainment_recyclerview)
-    lateinit var entertainmentRecyclerview: RecyclerView
+    @BindView(R.id.sport_recyclerview)
+    lateinit var sportRecyclerview: RecyclerView
 
     @BindView(R.id.swipe_refresh_layout)
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -62,7 +61,7 @@ class EntertainmentFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_entertainment, container, false)
+        val view = inflater.inflate(R.layout.fragment_sport, container, false)
         ButterKnife.bind(this, view)
         return view
     }
@@ -80,7 +79,6 @@ class EntertainmentFragment : Fragment() {
             connectInternet(requireContext())
         }
 
-
     }
 
     private fun checkConnection() {
@@ -90,20 +88,21 @@ class EntertainmentFragment : Fragment() {
                 shimmerFrameLayout.startShimmerAnimation()
                 noInternetAnimation.visibility = View.GONE
                 enableConnection.visibility = View.GONE
-                viewModel.getEntertainment(page)
+                viewModel.getSport(page)
             } else {
                 shimmerFrameLayout.visibility = View.GONE
                 shimmerFrameLayout.stopShimmerAnimation()
                 noInternetAnimation.visibility = View.VISIBLE
                 enableConnection.visibility = View.VISIBLE
+                swipeRefreshLayout.visibility = View.GONE
             }
         }
     }
 
     private fun initRecyclerView() {
-        entertainmentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-        entertainmentRecyclerview.adapter = adapter
-        entertainmentRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        sportRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        sportRecyclerview.adapter = adapter
+        sportRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
@@ -112,7 +111,7 @@ class EntertainmentFragment : Fragment() {
                     Log.i(TAG, "observeViewModel: page------------------------> $page")
                     if (page < pageNumbers && page < 6) {
                         page++
-                        viewModel.getEntertainment(page)
+                        viewModel.getSport(page)
                     } else {
                         Log.i(TAG, "onScrollStateChanged: page--------------> ")
                     }
@@ -126,9 +125,8 @@ class EntertainmentFragment : Fragment() {
     private fun initViewModel() {
         viewModelFactory = MainActivityFactory(
             Repository.getNewsClient(
-                NewsClient.getNewsClient(),
-                PreferenceManager.getDefaultSharedPreferences(requireActivity())
-            )
+                NewsClient.getNewsClient(), requireActivity().application
+            ), requireActivity().application
         )
 
         viewModel = ViewModelProvider(
@@ -138,16 +136,16 @@ class EntertainmentFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.entertainment.observe(viewLifecycleOwner) {
+        viewModel.sport.observe(viewLifecycleOwner) {
             if (it.articles.isEmpty()) {
-                entertainmentRecyclerview.visibility = View.GONE
+                sportRecyclerview.visibility = View.GONE
                 swipeRefreshLayout.visibility = View.GONE
                 adapter.setList(emptyList())
                 noDataView.visibility = View.VISIBLE
             } else {
                 pageNumbers = round(it.totalResults.toDouble() / 100).toInt()
                 Log.i(TAG, "observeViewModel: pageNumbers-----------------> $pageNumbers")
-                entertainmentRecyclerview.visibility = View.VISIBLE
+                sportRecyclerview.visibility = View.VISIBLE
                 swipeRefreshLayout.visibility = View.VISIBLE
                 adapter.setList(it.articles)
                 noDataView.visibility = View.GONE
@@ -160,9 +158,11 @@ class EntertainmentFragment : Fragment() {
 
     private fun refresh() {
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getEntertainment(1)
+            viewModel.getSport(1)
             swipeRefreshLayout.isRefreshing = true
         }
         swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor, null))
     }
+
+
 }

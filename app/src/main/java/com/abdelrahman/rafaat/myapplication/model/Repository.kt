@@ -1,64 +1,48 @@
 package com.abdelrahman.rafaat.myapplication.model
 
-import android.content.SharedPreferences
+import android.app.Application
 import android.util.Log
+import androidx.preference.PreferenceManager
 import com.abdelrahman.rafaat.myapplication.network.RemoteSource
 import retrofit2.Response
 
 private const val TAG = "Repository"
 
 class Repository private constructor(
-    private var remoteSource: RemoteSource,
-    private var sharedPreferences: SharedPreferences
+    private var remoteSource: RemoteSource, var application: Application
 ) : RepositoryInterface {
 
-    private lateinit var sortBy: String
-    private lateinit var country: String
-    private var editor: SharedPreferences.Editor? = null
+    private var country =
+        PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+            .getString("country", "us")!!
+
+    private var sortBy =
+        PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+            .getString("sortBY", "publishedAt")!!
 
     companion object {
         private var instance: Repository? = null
-        fun getNewsClient(
-            remoteSource: RemoteSource,
-            sharedPreferences: SharedPreferences
-        ): Repository {
+        fun getNewsClient(remoteSource: RemoteSource, application: Application): Repository {
             if (instance == null)
-                instance = Repository(remoteSource, sharedPreferences)
+                instance = Repository(remoteSource, application)
 
             return instance!!
         }
     }
 
-    init {
-        Log.i(TAG, "init: ")
-        this.editor = sharedPreferences.edit()
-        getDefaultData()
+    private fun checkSharedPreference() {
+        country = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+            .getString("country", "us")!!
+
+        sortBy = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+            .getString("sortBY", "publishedAt")!!
+
+        Log.i(TAG, "checkSharedPreference: country----------> $country")
+        Log.i(TAG, "checkSharedPreference: sortBY----------> $sortBy")
     }
 
-    private fun getDefaultData() {
-        country = sharedPreferences.getString("country", "us")!!
-        sortBy = sharedPreferences.getString("sortBy", "publishedAt")!!
-
-        Log.i(TAG, "getDefaultData: country------------------> $country")
-        Log.i(TAG, "getDefaultData: sortBy-------------------> $sortBy")
-    }
-
-    override fun updateSharedPreference(country: String, sortBy: String) {
-        this.sortBy = sortBy
-        this.country = country
-        editor?.putString("country", country)
-        editor?.putString("sortBy", sortBy)
-        editor?.commit()
-
-        Log.i(TAG, "updateSharedPreference: country------------------> $country")
-        Log.i(TAG, "updateSharedPreference: sortBy-------------------> $sortBy")
-    }
-
-
-    override suspend fun getNewsBYCountry(
-        category: String, page: Int
-    ): Response<NewsModel> {
-
+    override suspend fun getNewsBYCountry(category: String, page: Int): Response<NewsModel> {
+        checkSharedPreference()
         val response = this.remoteSource.getNewsBYCountry(
             country = country,
             sortBy = sortBy,
@@ -67,11 +51,13 @@ class Repository private constructor(
         )
         Log.i(TAG, "getNewsBYCountry: code-----------> ${response.code()}")
         Log.i(TAG, "getNewsBYCountry: status----------> ${response.body()?.status}")
+        Log.i(TAG, "getNewsBYCountry: status----------> ${response.body()?.articles!!.size}")
 
         return response
     }
 
     override suspend fun getNewsBySearch(searchTopic: String, page: Int): Response<NewsModel> {
+        checkSharedPreference()
         val response = remoteSource.getNewsBySearch(searchTopic, sortBy, page)
         Log.i(TAG, "getNews: code------------> ${response.code()}")
         Log.i(TAG, "getNews: status----------> ${response.body()?.status}")

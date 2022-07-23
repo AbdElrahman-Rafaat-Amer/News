@@ -21,5 +21,47 @@
     <string name="country">الدولة</string>
     <string name="sortBy">ترتيب الأخبار</string>
     <string name="language">لغة الأخبار</string>
+    <string name="news_ranking">ترتيب الأخبار</string>
+    <string name="country_language">اللغة والمنطقة</string>
 
+    <string-array name = "news_ranking">
+        <item> الاحدث </item>
+        <item> الصلة </item>
+        <item> الاكثر انتشاراً </item>
+    </string-array>
+
+    <string-array name = "country_values">
+        <item> الولايات المتحدة الأمريكية </item>
+        <item> الإمارات العربية المتحدة </item>
+        <item> الأرجنتين </item>
+        <item> النمسا </item>
+        <item> أستراليا </item>
+        <item> بلجيكا </item>
+        <item> بلغاريا </item>
+        <item> البرازيل </item>
+        <item> كندا </item>
+        <item> سويسرا </item>
+        <item> الصين </item>
+        <item> كولومبيا </item>
+        <item> كوبا </item>
+        <item> التشيك </item>
+        <item> ألمانيا </item>
+        <item> مصر </item>
+        <item> فرنسا </item>
+        <item> مملكة بريطانيا العظمى </item>
+        <item> اليونان </item>
+        <item> هونغ كونغ </item>
+        <item> المجر </item>
+        <item> إندونيسيا </item>
+        <item> أيرلندا </item>
+        <item> إيطاليا </item>
+        <item> اليابان </item>
+        <item> كوريا الجنوبية </item>
+        <item> ليتوانيا </item>
+        <item> لاتفيا </item>
+        <item> المغرب </item>
+        <item> المكسيك </item>
+        <item> نيجيريا </item>
+        <item> هولندا </item>
+    </string-array>
 </resources>

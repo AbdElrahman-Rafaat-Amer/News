@@ -26,6 +26,14 @@
         <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/layout/shimmer_placeholder_layout.xml" value="0.27447916666666666" />
         <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/menu/activity_main_drawer.xml" value="0.1265625" />
         <entry key="..\:/Android/projects/MyProjects/News/app/src/main/res/menu/navigation_drawer_menu.xml" value="0.264" />
+        <entry key="..\:/Github Projects/News/app/src/main/res/layout/activity_setting.xml" value="0.27447916666666666" />
+        <entry key="..\:/Github Projects/News/app/src/main/res/layout/activity_splash.xml" value="0.27447916666666666" />
+        <entry key="..\:/Github Projects/News/app/src/main/res/layout/fragment_home.xml" value="0.1334853090172239" />
+        <entry key="..\:/Github Projects/News/app/src/main/res/layout/fragment_setting.xml" value="0.27447916666666666" />
+        <entry key="..\:/Github Projects/News/app/src/main/res/layout/fragment_sport.xml" value="0.27447916666666666" />
+        <entry key="..\:/Github Projects/News/app/src/main/res/layout/no_connection_view.xml" value="0.27447916666666666" />
+        <entry key="..\:/Github Projects/News/app/src/main/res/layout/no_data_view.xml" value="0.27447916666666666" />
+        <entry key="..\:/Github Projects/News/app/src/main/res/xml/root_preferences.xml" value="0.264" />
       </map>
     </option>
   </component>

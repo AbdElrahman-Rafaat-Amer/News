@@ -1,4 +1,4 @@
-package com.abdelrahman.rafaat.myapplication.health
+package com.abdelrahman.rafaat.myapplication.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -8,16 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.ViewModelProvider
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.abdelrahman.rafaat.myapplication.R
-import com.abdelrahman.rafaat.myapplication.mainscreen.view.NewsRecyclerAdapter
-import com.abdelrahman.rafaat.myapplication.mainscreen.viewmodel.MainActivityFactory
-import com.abdelrahman.rafaat.myapplication.mainscreen.viewmodel.MainActivityViewModel
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.view.NewsRecyclerAdapter
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.viewmodel.MainActivityFactory
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.viewmodel.MainActivityViewModel
 import com.abdelrahman.rafaat.myapplication.model.Repository
 import com.abdelrahman.rafaat.myapplication.network.NewsClient
 import com.abdelrahman.rafaat.myapplication.utils.ConnectionLiveData
@@ -26,12 +25,12 @@ import com.airbnb.lottie.LottieAnimationView
 import com.facebook.shimmer.ShimmerFrameLayout
 import kotlin.math.round
 
-private const val TAG = "HealthFragment"
+private const val TAG = "EntertainmentFragment"
 
-class HealthFragment : Fragment() {
+class EntertainmentFragment : Fragment() {
 
-    @BindView(R.id.health_recyclerview)
-    lateinit var healthRecyclerview: RecyclerView
+    @BindView(R.id.entertainment_recyclerview)
+    lateinit var entertainmentRecyclerview: RecyclerView
 
     @BindView(R.id.swipe_refresh_layout)
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -62,7 +61,7 @@ class HealthFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_health, container, false)
+        val view = inflater.inflate(R.layout.fragment_entertainment, container, false)
         ButterKnife.bind(this, view)
         return view
     }
@@ -90,21 +89,21 @@ class HealthFragment : Fragment() {
                 shimmerFrameLayout.startShimmerAnimation()
                 noInternetAnimation.visibility = View.GONE
                 enableConnection.visibility = View.GONE
-                viewModel.getHealth(page)
+                viewModel.getEntertainment(page)
             } else {
                 shimmerFrameLayout.visibility = View.GONE
                 shimmerFrameLayout.stopShimmerAnimation()
                 noInternetAnimation.visibility = View.VISIBLE
                 enableConnection.visibility = View.VISIBLE
+                swipeRefreshLayout.visibility = View.GONE
             }
         }
     }
 
     private fun initRecyclerView() {
-        healthRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-        healthRecyclerview.adapter = adapter
-
-        healthRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        entertainmentRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        entertainmentRecyclerview.adapter = adapter
+        entertainmentRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
@@ -113,7 +112,7 @@ class HealthFragment : Fragment() {
                     Log.i(TAG, "observeViewModel: page------------------------> $page")
                     if (page < pageNumbers && page < 6) {
                         page++
-                        viewModel.getHealth(page)
+                        viewModel.getEntertainment(page)
                     } else {
                         Log.i(TAG, "onScrollStateChanged: page--------------> ")
                     }
@@ -127,9 +126,8 @@ class HealthFragment : Fragment() {
     private fun initViewModel() {
         viewModelFactory = MainActivityFactory(
             Repository.getNewsClient(
-                NewsClient.getNewsClient(),
-                PreferenceManager.getDefaultSharedPreferences(requireActivity())
-            )
+                NewsClient.getNewsClient(), requireActivity().application
+            ), requireActivity().application
         )
 
         viewModel = ViewModelProvider(
@@ -139,16 +137,16 @@ class HealthFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.health.observe(viewLifecycleOwner) {
+        viewModel.entertainment.observe(viewLifecycleOwner) {
             if (it.articles.isEmpty()) {
-                healthRecyclerview.visibility = View.GONE
+                entertainmentRecyclerview.visibility = View.GONE
                 swipeRefreshLayout.visibility = View.GONE
                 adapter.setList(emptyList())
                 noDataView.visibility = View.VISIBLE
             } else {
                 pageNumbers = round(it.totalResults.toDouble() / 100).toInt()
                 Log.i(TAG, "observeViewModel: pageNumbers-----------------> $pageNumbers")
-                healthRecyclerview.visibility = View.VISIBLE
+                entertainmentRecyclerview.visibility = View.VISIBLE
                 swipeRefreshLayout.visibility = View.VISIBLE
                 adapter.setList(it.articles)
                 noDataView.visibility = View.GONE
@@ -161,7 +159,7 @@ class HealthFragment : Fragment() {
 
     private fun refresh() {
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getHealth(1)
+            viewModel.getEntertainment(1)
             swipeRefreshLayout.isRefreshing = true
         }
         swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor, null))

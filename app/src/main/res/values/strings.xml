@@ -10,8 +10,13 @@
     <string name="search_now">enter your keywords</string>
     <string name="news_image">News Image</string>
     <string name="source_name">source name</string>
-    <string name="news_data">7-7-2020</string>
-    <string name="news_title">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="news_data">7–7–2020</string>
+    <string name="news_title">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+        Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley
+        of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+        electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Lettres
+        sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
+        including versions of Lorem Ipsum.</string>
     <string name="author">author</string>
     <string name="description">description</string>
     <string name="unknown">Unknown</string>
@@ -23,6 +28,14 @@
     <string name="country">Country</string>
     <string name="sortBy">Sort By</string>
     <string name="language">Language</string>
+    <string name="news_ranking">News ranking</string>
+    <string name="country_language">Country and Language</string>
+
+    <string-array name="news_ranking">
+        <item>Latest</item>
+        <item>Relevance</item>
+        <item>Popular</item>
+    </string-array>
 
     <string-array name="sortBy_values">
         <item>publishedAt</item>

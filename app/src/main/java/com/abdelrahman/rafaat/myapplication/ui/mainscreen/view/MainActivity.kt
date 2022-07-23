@@ -1,4 +1,4 @@
-package com.abdelrahman.rafaat.myapplication.mainscreen.view
+package com.abdelrahman.rafaat.myapplication.ui.mainscreen.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.abdelrahman.rafaat.myapplication.R
-import com.abdelrahman.rafaat.myapplication.setting.SettingActivity
+import com.abdelrahman.rafaat.myapplication.ui.setting.SettingActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 

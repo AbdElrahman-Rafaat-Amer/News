@@ -1,5 +1,6 @@
-package com.abdelrahman.rafaat.myapplication.mainscreen.viewmodel
+package com.abdelrahman.rafaat.myapplication.ui.mainscreen.viewmodel
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "MainActivityModel"
 
-class MainActivityViewModel(private val _iRepo: RepositoryInterface) : ViewModel() {
+class MainActivityViewModel(private val _iRepo: RepositoryInterface, var application: Application) : ViewModel() {
     private var _news = MutableLiveData<NewsModel>()
     val news: LiveData<NewsModel> = _news
 
@@ -31,10 +32,23 @@ class MainActivityViewModel(private val _iRepo: RepositoryInterface) : ViewModel
     private var _entertainment = MutableLiveData<NewsModel>()
     val entertainment: LiveData<NewsModel> = _entertainment
 
+   /* private var country = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+        .getString("country", "us")!!
+
+    private var sortBy = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+        .getString("country", "us")!!*/
 
     init {
         Log.i(TAG, "init: ")
     }
+
+   /* fun checkSharedPreference(){
+        country = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+            .getString("country", "us")!!
+
+        sortBy = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+            .getString("country", "us")!!
+    }*/
 
     fun getNewsBySearch(page: Int, searchTopic: String) {
         viewModelScope.launch {

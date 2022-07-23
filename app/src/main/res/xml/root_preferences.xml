@@ -1,0 +1,24 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/country_language">
+        <ListPreference
+            android:defaultValue="us"
+            android:entries="@array/country_values"
+            android:entryValues="@array/language_values"
+            android:key="country"
+            android:summary="%s"
+            android:title="@string/country" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/news_ranking">
+        <ListPreference
+            android:defaultValue="publishedAt"
+            android:entries="@array/news_ranking"
+            android:entryValues="@array/sortBy_values"
+            android:key="sortBY"
+            android:summary="%s"
+            android:title="@string/sortBy" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

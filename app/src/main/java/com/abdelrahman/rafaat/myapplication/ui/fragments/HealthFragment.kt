@@ -1,4 +1,4 @@
-package com.abdelrahman.rafaat.myapplication.sport
+package com.abdelrahman.rafaat.myapplication.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -8,16 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.ViewModelProvider
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.abdelrahman.rafaat.myapplication.R
-import com.abdelrahman.rafaat.myapplication.mainscreen.view.NewsRecyclerAdapter
-import com.abdelrahman.rafaat.myapplication.mainscreen.viewmodel.MainActivityFactory
-import com.abdelrahman.rafaat.myapplication.mainscreen.viewmodel.MainActivityViewModel
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.view.NewsRecyclerAdapter
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.viewmodel.MainActivityFactory
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.viewmodel.MainActivityViewModel
 import com.abdelrahman.rafaat.myapplication.model.Repository
 import com.abdelrahman.rafaat.myapplication.network.NewsClient
 import com.abdelrahman.rafaat.myapplication.utils.ConnectionLiveData
@@ -26,12 +25,12 @@ import com.airbnb.lottie.LottieAnimationView
 import com.facebook.shimmer.ShimmerFrameLayout
 import kotlin.math.round
 
-private const val TAG = "SportFragment"
+private const val TAG = "HealthFragment"
 
-class SportFragment : Fragment() {
+class HealthFragment : Fragment() {
 
-    @BindView(R.id.sport_recyclerview)
-    lateinit var sportRecyclerview: RecyclerView
+    @BindView(R.id.health_recyclerview)
+    lateinit var healthRecyclerview: RecyclerView
 
     @BindView(R.id.swipe_refresh_layout)
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -62,7 +61,7 @@ class SportFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_sport, container, false)
+        val view = inflater.inflate(R.layout.fragment_health, container, false)
         ButterKnife.bind(this, view)
         return view
     }
@@ -80,6 +79,7 @@ class SportFragment : Fragment() {
             connectInternet(requireContext())
         }
 
+
     }
 
     private fun checkConnection() {
@@ -89,20 +89,22 @@ class SportFragment : Fragment() {
                 shimmerFrameLayout.startShimmerAnimation()
                 noInternetAnimation.visibility = View.GONE
                 enableConnection.visibility = View.GONE
-                viewModel.getSport(page)
+                viewModel.getHealth(page)
             } else {
                 shimmerFrameLayout.visibility = View.GONE
                 shimmerFrameLayout.stopShimmerAnimation()
                 noInternetAnimation.visibility = View.VISIBLE
                 enableConnection.visibility = View.VISIBLE
+                swipeRefreshLayout.visibility = View.GONE
             }
         }
     }
 
     private fun initRecyclerView() {
-        sportRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-        sportRecyclerview.adapter = adapter
-        sportRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        healthRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        healthRecyclerview.adapter = adapter
+
+        healthRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
@@ -111,7 +113,7 @@ class SportFragment : Fragment() {
                     Log.i(TAG, "observeViewModel: page------------------------> $page")
                     if (page < pageNumbers && page < 6) {
                         page++
-                        viewModel.getSport(page)
+                        viewModel.getHealth(page)
                     } else {
                         Log.i(TAG, "onScrollStateChanged: page--------------> ")
                     }
@@ -125,9 +127,8 @@ class SportFragment : Fragment() {
     private fun initViewModel() {
         viewModelFactory = MainActivityFactory(
             Repository.getNewsClient(
-                NewsClient.getNewsClient(),
-                PreferenceManager.getDefaultSharedPreferences(requireActivity())
-            )
+                NewsClient.getNewsClient(), requireActivity().application
+            ), requireActivity().application
         )
 
         viewModel = ViewModelProvider(
@@ -137,16 +138,16 @@ class SportFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.sport.observe(viewLifecycleOwner) {
+        viewModel.health.observe(viewLifecycleOwner) {
             if (it.articles.isEmpty()) {
-                sportRecyclerview.visibility = View.GONE
+                healthRecyclerview.visibility = View.GONE
                 swipeRefreshLayout.visibility = View.GONE
                 adapter.setList(emptyList())
                 noDataView.visibility = View.VISIBLE
             } else {
                 pageNumbers = round(it.totalResults.toDouble() / 100).toInt()
                 Log.i(TAG, "observeViewModel: pageNumbers-----------------> $pageNumbers")
-                sportRecyclerview.visibility = View.VISIBLE
+                healthRecyclerview.visibility = View.VISIBLE
                 swipeRefreshLayout.visibility = View.VISIBLE
                 adapter.setList(it.articles)
                 noDataView.visibility = View.GONE
@@ -159,11 +160,9 @@ class SportFragment : Fragment() {
 
     private fun refresh() {
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getSport(1)
+            viewModel.getHealth(1)
             swipeRefreshLayout.isRefreshing = true
         }
         swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor, null))
     }
-
-
 }

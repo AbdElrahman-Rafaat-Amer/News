@@ -19,7 +19,7 @@
         tools:ignore="ImageContrastCheck" />
 
     <TextView
-        android:id="@+id/enable_connection"
+        android:id="@+id/no_data_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"

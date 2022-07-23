@@ -1,4 +1,4 @@
-package com.abdelrahman.rafaat.myapplication.science
+package com.abdelrahman.rafaat.myapplication.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -6,32 +6,40 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.appcompat.widget.AppCompatButton
+
 import androidx.lifecycle.ViewModelProvider
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.abdelrahman.rafaat.myapplication.R
-import com.abdelrahman.rafaat.myapplication.mainscreen.view.NewsRecyclerAdapter
-import com.abdelrahman.rafaat.myapplication.mainscreen.viewmodel.MainActivityFactory
-import com.abdelrahman.rafaat.myapplication.mainscreen.viewmodel.MainActivityViewModel
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.view.NewsRecyclerAdapter
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.viewmodel.MainActivityFactory
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.viewmodel.MainActivityViewModel
 import com.abdelrahman.rafaat.myapplication.model.Repository
 import com.abdelrahman.rafaat.myapplication.network.NewsClient
 import com.abdelrahman.rafaat.myapplication.utils.ConnectionLiveData
 import com.abdelrahman.rafaat.myapplication.utils.connectInternet
 import com.airbnb.lottie.LottieAnimationView
 import com.facebook.shimmer.ShimmerFrameLayout
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.round
 
-private const val TAG = "ScienceFragment"
+private const val TAG = "HomeFragment"
 
-class ScienceFragment : Fragment() {
+class HomeFragment : Fragment() {
 
-    @BindView(R.id.science_recyclerview)
-    lateinit var scienceRecyclerview: RecyclerView
+    @BindView(R.id.search_view)
+    lateinit var searchView: SearchView
+
+    @BindView(R.id.home_recyclerview)
+    lateinit var homeRecyclerview: RecyclerView
 
     @BindView(R.id.swipe_refresh_layout)
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -60,7 +68,7 @@ class ScienceFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_science, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
         ButterKnife.bind(this, view)
         return view
     }
@@ -73,8 +81,10 @@ class ScienceFragment : Fragment() {
         initViewModel()
         observeViewModel()
         refresh()
+        handleSearchView()
 
         enableConnection.setOnClickListener {
+            Log.i(TAG, "onViewCreated: enableConnection----------> ")
             connectInternet(requireContext())
         }
 
@@ -87,20 +97,23 @@ class ScienceFragment : Fragment() {
                 shimmerFrameLayout.startShimmerAnimation()
                 noInternetAnimation.visibility = View.GONE
                 enableConnection.visibility = View.GONE
-                viewModel.getScience(page)
+                viewModel.getNews(page)
             } else {
                 shimmerFrameLayout.visibility = View.GONE
                 shimmerFrameLayout.stopShimmerAnimation()
                 noInternetAnimation.visibility = View.VISIBLE
                 enableConnection.visibility = View.VISIBLE
+                swipeRefreshLayout.visibility = View.GONE
+                searchView.visibility = View.GONE
             }
         }
     }
 
     private fun initRecyclerView() {
-        scienceRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-        scienceRecyclerview.adapter = adapter
-        scienceRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        homeRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        homeRecyclerview.adapter = adapter
+
+        homeRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
@@ -109,7 +122,7 @@ class ScienceFragment : Fragment() {
                     Log.i(TAG, "observeViewModel: page------------------------> $page")
                     if (page < pageNumbers && page < 6) {
                         page++
-                        viewModel.getScience(page)
+                        viewModel.getNews(page)
                     } else {
                         Log.i(TAG, "onScrollStateChanged: page--------------> ")
                     }
@@ -123,9 +136,8 @@ class ScienceFragment : Fragment() {
     private fun initViewModel() {
         viewModelFactory = MainActivityFactory(
             Repository.getNewsClient(
-                NewsClient.getNewsClient(),
-                PreferenceManager.getDefaultSharedPreferences(requireActivity())
-            )
+                NewsClient.getNewsClient(), requireActivity().application
+            ), requireActivity().application
         )
 
         viewModel = ViewModelProvider(
@@ -135,32 +147,57 @@ class ScienceFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.science.observe(viewLifecycleOwner) {
+        viewModel.news.observe(viewLifecycleOwner) {
             if (it.articles.isEmpty()) {
-                scienceRecyclerview.visibility = View.GONE
-                swipeRefreshLayout.visibility = View.GONE
+                homeRecyclerview.visibility = View.GONE
                 adapter.setList(emptyList())
                 noDataView.visibility = View.VISIBLE
             } else {
                 pageNumbers = round(it.totalResults.toDouble() / 100).toInt()
                 Log.i(TAG, "observeViewModel: pageNumbers-----------------> $pageNumbers")
-                scienceRecyclerview.visibility = View.VISIBLE
-                swipeRefreshLayout.visibility = View.VISIBLE
+                homeRecyclerview.visibility = View.VISIBLE
                 adapter.setList(it.articles)
                 noDataView.visibility = View.GONE
             }
-            swipeRefreshLayout.isRefreshing = false
+            swipeRefreshLayout.visibility = View.VISIBLE
+            searchView.visibility = View.VISIBLE
             shimmerFrameLayout.visibility = View.GONE
             shimmerFrameLayout.stopShimmerAnimation()
+            swipeRefreshLayout.isRefreshing = false
         }
     }
 
     private fun refresh() {
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getScience(page)
+            viewModel.getNews(1)
             swipeRefreshLayout.isRefreshing = true
         }
         swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor, null))
     }
 
+    private fun handleSearchView() {
+        var job: Job? = null
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                job?.cancel()
+                job = MainScope().launch {
+                    delay(500L)
+                    if (newText!!.isNotEmpty()) {
+                        viewModel.getNewsBySearch(
+                            page, newText
+                        )
+                    } else {
+                        viewModel.getNews(page)
+                    }
+                }
+                return false
+            }
+
+        })
+    }
 }

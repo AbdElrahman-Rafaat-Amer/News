@@ -14,13 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.News">
         <activity
-            android:name=".setting.SettingActivity"
+            android:name=".ui.setting.SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".mainscreen.view.MainActivity"
+            android:name=".ui.mainscreen.view.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".ui.SplashActivity"
             android:exported="true"
             android:theme="@style/noActionBar">
             <intent-filter>

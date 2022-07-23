@@ -1,9 +1,10 @@
-package com.abdelrahman.rafaat.myapplication
+package com.abdelrahman.rafaat.myapplication.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.abdelrahman.rafaat.myapplication.mainscreen.view.MainActivity
+import com.abdelrahman.rafaat.myapplication.R
+import com.abdelrahman.rafaat.myapplication.ui.mainscreen.view.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
