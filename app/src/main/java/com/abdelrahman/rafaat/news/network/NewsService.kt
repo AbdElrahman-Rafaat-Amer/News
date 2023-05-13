@@ -1,6 +1,7 @@
 package com.abdelrahman.rafaat.news.network
 
 import com.abdelrahman.rafaat.news.model.NewsModel
+import com.abdelrahman.rafaat.news.utils.NEWS_API_KEY
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -13,7 +14,7 @@ interface NewsService {
         @Query("category") category: String = "general",
         @Query("sortBy") sortBy: String = "publishedAt",
         @Query("page") page: String = "1",
-        @Query("apiKey") apiKey: String = "409167f816754aae80fb870a798d92c8"
+        @Query("apiKey") apiKey: String = NEWS_API_KEY
     ): Response<NewsModel>
 
     @GET("everything")
@@ -21,6 +22,6 @@ interface NewsService {
         @Query("q") q: String,
         @Query("sortBy") sortBy: String = "publishedAt",
         @Query("page") page: String = "1",
-        @Query("apiKey") apiKey: String = "409167f816754aae80fb870a798d92c8"
+        @Query("apiKey") apiKey: String = NEWS_API_KEY
     ): Response<NewsModel>
 }

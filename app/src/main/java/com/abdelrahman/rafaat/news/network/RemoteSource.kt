@@ -5,7 +5,7 @@ import retrofit2.Response
 
 interface RemoteSource {
 
-    suspend fun getNewsBYCountry(
+    suspend fun getNewsByCountry(
         country: String,
         category: String,
         sortBy: String,

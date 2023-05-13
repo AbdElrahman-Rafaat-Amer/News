@@ -1,7 +1,6 @@
 package com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,8 +9,6 @@ import com.abdelrahman.rafaat.news.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
-private const val TAG = "MainActivityModel"
 
 class MainActivityViewModel(private val _iRepo: RepositoryInterface, var application: Application) : ViewModel() {
     private var _news = MutableLiveData<NewsModel>()
@@ -31,24 +28,6 @@ class MainActivityViewModel(private val _iRepo: RepositoryInterface, var applica
 
     private var _entertainment = MutableLiveData<NewsModel>()
     val entertainment: LiveData<NewsModel> = _entertainment
-
-   /* private var country = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
-        .getString("country", "us")!!
-
-    private var sortBy = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
-        .getString("country", "us")!!*/
-
-    init {
-        Log.i(TAG, "init: ")
-    }
-
-   /* fun checkSharedPreference(){
-        country = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
-            .getString("country", "us")!!
-
-        sortBy = PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
-            .getString("country", "us")!!
-    }*/
 
     fun getNewsBySearch(page: Int, searchTopic: String) {
         viewModelScope.launch {
@@ -71,9 +50,6 @@ class MainActivityViewModel(private val _iRepo: RepositoryInterface, var applica
     fun getNews(page: Int) {
         viewModelScope.launch {
             val response = _iRepo.getNewsBYCountry("general", page)
-            Log.i(TAG, "getNews: code---------------> ${response.code()}")
-            Log.i(TAG, "getNews: status-------------> ${response.body()?.status}")
-            Log.i(TAG, "getNews: size---------------> ${response.body()?.articles?.size}")
             withContext(Dispatchers.Main) {
                 if (response.code() == 200 && response.body()?.status == "ok") {
                     _news.postValue(response.body())
@@ -96,7 +72,6 @@ class MainActivityViewModel(private val _iRepo: RepositoryInterface, var applica
                 }
             }
         }
-
     }
 
     fun getScience(page: Int) {
@@ -110,7 +85,6 @@ class MainActivityViewModel(private val _iRepo: RepositoryInterface, var applica
                 }
             }
         }
-
     }
 
     fun getHealth(page: Int) {
@@ -124,7 +98,6 @@ class MainActivityViewModel(private val _iRepo: RepositoryInterface, var applica
                 }
             }
         }
-
     }
 
     fun getBusiness(page: Int) {
@@ -138,7 +111,6 @@ class MainActivityViewModel(private val _iRepo: RepositoryInterface, var applica
                 }
             }
         }
-
     }
 
     fun getEntertainment(page: Int) {
@@ -153,10 +125,5 @@ class MainActivityViewModel(private val _iRepo: RepositoryInterface, var applica
             }
         }
 
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.i(TAG, "onCleared: ")
     }
 }

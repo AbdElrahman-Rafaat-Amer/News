@@ -1,16 +1,13 @@
 package com.abdelrahman.rafaat.news.network
 
-import android.util.Log
 import com.abdelrahman.rafaat.news.model.NewsModel
 import retrofit2.Response
-
-private const val TAG = "NewsClient"
 
 class NewsClient private constructor() : RemoteSource {
 
     private val newsHelper = NewsHelper.getClient
 
-    override suspend fun getNewsBYCountry(
+    override suspend fun getNewsByCountry(
         country: String, category: String, sortBy: String, page: Int
     ): Response<NewsModel> {
 
@@ -20,9 +17,6 @@ class NewsClient private constructor() : RemoteSource {
             sortBy = sortBy,
             page = page.toString()
         )
-        Log.i(TAG, "getNewsBYCountry: code----------> ${response.code()}")
-        Log.i(TAG, "getNewsBYCountry: body----------> ${response.body()}")
-
         return response
     }
 
@@ -38,9 +32,6 @@ class NewsClient private constructor() : RemoteSource {
                 sortBy = sortBy,
                 page = page.toString()
             )
-
-        Log.i(TAG, "getNews: code----------> ${response.code()}")
-        Log.i(TAG, "getNews: body----------> ${response.body()}")
         return response
     }
 
@@ -52,6 +43,5 @@ class NewsClient private constructor() : RemoteSource {
             return instance!!
         }
     }
-
 
 }

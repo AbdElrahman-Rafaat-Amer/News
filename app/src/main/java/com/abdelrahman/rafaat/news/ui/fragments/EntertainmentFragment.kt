@@ -1,7 +1,6 @@
 package com.abdelrahman.rafaat.news.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,8 +18,6 @@ import com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel.MainActivityViewModel
 import com.abdelrahman.rafaat.news.utils.ConnectionLiveData
 import com.abdelrahman.rafaat.news.utils.connectInternet
 import kotlin.math.round
-
-private const val TAG = "EntertainmentFragment"
 
 class EntertainmentFragment : Fragment() {
 
@@ -82,14 +79,9 @@ class EntertainmentFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    Log.i(TAG, "onScrollStateChanged: reach end of recyclerView")
-                    Log.i(TAG, "observeViewModel: pageNumbers-----------------> $pageNumbers")
-                    Log.i(TAG, "observeViewModel: page------------------------> $page")
                     if (page < pageNumbers && page < 6) {
                         page++
                         viewModel.getEntertainment(page)
-                    } else {
-                        Log.i(TAG, "onScrollStateChanged: page--------------> ")
                     }
                 }
             }
@@ -118,7 +110,6 @@ class EntertainmentFragment : Fragment() {
                 binding.noDataView.root.visibility = View.VISIBLE
             } else {
                 pageNumbers = round(it.totalResults.toDouble() / 100).toInt()
-                Log.i(TAG, "observeViewModel: pageNumbers-----------------> $pageNumbers")
                 binding.entertainmentRecyclerview.visibility = View.VISIBLE
                 binding.swipeRefreshLayout.visibility = View.VISIBLE
                 adapter.setList(it.articles)

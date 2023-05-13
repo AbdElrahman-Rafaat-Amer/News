@@ -1,7 +1,6 @@
 package com.abdelrahman.rafaat.news.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,8 +23,6 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.round
-
-private const val TAG = "HomeFragment"
 
 class HomeFragment : Fragment() {
 
@@ -89,14 +86,9 @@ class HomeFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    Log.i(TAG, "onScrollStateChanged: reach end of recyclerView")
-                    Log.i(TAG, "observeViewModel: pageNumbers-----------------> $pageNumbers")
-                    Log.i(TAG, "observeViewModel: page------------------------> $page")
                     if (page < pageNumbers && page < 6) {
                         page++
                         viewModel.getNews(page)
-                    } else {
-                        Log.i(TAG, "onScrollStateChanged: page--------------> ")
                     }
                 }
             }
@@ -124,7 +116,6 @@ class HomeFragment : Fragment() {
                  binding.noDataView.root.visibility = View.VISIBLE
             } else {
                 pageNumbers = round(it.totalResults.toDouble() / 100).toInt()
-                Log.i(TAG, "observeViewModel: pageNumbers-----------------> $pageNumbers")
                  binding.homeRecyclerview.visibility = View.VISIBLE
                 adapter.setList(it.articles)
                  binding.noDataView.root.visibility = View.GONE

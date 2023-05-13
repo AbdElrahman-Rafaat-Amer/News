@@ -18,12 +18,9 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 
-
-private const val TAG = "MainActivity"
-
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +30,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         initBannerAds()
         binding.navigationView.setNavigationItemSelectedListener(this)
         initDrawerLayout()
-        initViewPager()
         initTabLayout()
-
+        initViewPager()
     }
 
     private fun initBannerAds() {
@@ -44,65 +40,37 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val adRequestTop = AdRequest.Builder().build()
         val adRequestBottom = AdRequest.Builder().build()
-      
+
         binding.adBannerViewTop.loadAd(adRequestTop)
-        binding.adBannerViewTop.adListener = object: AdListener() {
-            override fun onAdClicked() {
-                Log.i(TAG, "onAdClicked: ")
-            }
-
-            override fun onAdClosed() {
-                Log.i(TAG, "onAdClosed: ")
-            }
-
-            override fun onAdFailedToLoad(adError : LoadAdError) {
-                Log.i(TAG, "onAdFailedToLoad:adError " + adError.message)
-            }
-
-            override fun onAdImpression() {
-                Log.i(TAG, "onAdImpression: ")
-            }
-
-            override fun onAdLoaded() {
-                Log.i(TAG, "onAdLoaded: ")
-            }
-
-            override fun onAdOpened() {
-                Log.i(TAG, "onAdOpened: ")
-            }
+        binding.adBannerViewTop.adListener = object : AdListener() {
+            override fun onAdClicked() {}
+            override fun onAdClosed() {}
+            override fun onAdFailedToLoad(adError: LoadAdError) {}
+            override fun onAdImpression() {}
+            override fun onAdLoaded() {}
+            override fun onAdOpened() {}
         }
 
         binding.adBannerViewBottom.loadAd(adRequestBottom)
-        binding.adBannerViewBottom.adListener = object: AdListener() {
-            override fun onAdClicked() {
-                Log.i(TAG, "onAdClicked: ")
-            }
-
-            override fun onAdClosed() {
-                Log.i(TAG, "onAdClosed: ")
-            }
-
-            override fun onAdFailedToLoad(adError : LoadAdError) {
-                Log.i(TAG, "onAdFailedToLoad:adError " + adError.message)
-            }
-
-            override fun onAdImpression() {
-                Log.i(TAG, "onAdImpression: ")
-            }
-
-            override fun onAdLoaded() {
-                Log.i(TAG, "onAdLoaded: ")
-            }
-
-            override fun onAdOpened() {
-                Log.i(TAG, "onAdOpened: ")
-            }
+        binding.adBannerViewBottom.adListener = object : AdListener() {
+            override fun onAdClicked() {}
+            override fun onAdClosed() {}
+            override fun onAdFailedToLoad(adError: LoadAdError) {}
+            override fun onAdImpression() {}
+            override fun onAdLoaded() {}
+            override fun onAdOpened() {}
         }
     }
 
     private fun initDrawerLayout() {
         val toggle =
-            ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolBar, R.string.open, R.string.close)
+            ActionBarDrawerToggle(
+                this,
+                binding.drawerLayout,
+                binding.toolBar,
+                R.string.open,
+                R.string.close
+            )
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.isDrawerIndicatorEnabled
         toggle.drawerArrowDrawable.color = getColor(R.color.white)
@@ -117,7 +85,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 binding.tabLayoutView.getTabAt(position)!!.select()
-                Log.i(TAG, "onPageSelected: position-----------> $position")
             }
         })
     }
@@ -133,7 +100,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.tabLayoutView.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 binding.viewPager.currentItem = tab?.position ?: 0
-                Log.i(TAG, "onTabSelected: position ------> ${tab?.position}")
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
