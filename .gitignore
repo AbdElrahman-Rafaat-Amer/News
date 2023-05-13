@@ -49,3 +49,5 @@ google-services.json
 # Android Profiling
 *.hprof
 app/upload_certificate.pem
+.idea/misc.xml
+.idea/gradle.xml
