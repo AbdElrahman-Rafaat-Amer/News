@@ -5,14 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="7sp"
-    tools:context=".sport.SportFragment">
+    tools:context=".ui.fragments.SportFragment">
 
     <include
+        android:id="@+id/connectionLayout"
         layout="@layout/no_connection_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <include
+        android:id="@+id/shimmerAnimationLayout"
         layout="@layout/shimmer_animation_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

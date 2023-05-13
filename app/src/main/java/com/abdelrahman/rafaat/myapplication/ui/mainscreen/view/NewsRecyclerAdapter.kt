@@ -35,7 +35,7 @@ class NewsRecyclerAdapter : RecyclerView.Adapter<NewsRecyclerAdapter.ViewHolder>
         holder.newsDataTextview.text = currentArticle.publishedAt.slice(0..9)
         holder.titleTextView.text = currentArticle.title
         holder.authorTextview.apply {
-            if (currentArticle.author == null)
+            if (currentArticle.author == "")
                 this.text = context.resources.getString(R.string.unknown)
             else
                 this.text = currentArticle.author
@@ -47,7 +47,6 @@ class NewsRecyclerAdapter : RecyclerView.Adapter<NewsRecyclerAdapter.ViewHolder>
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(currentArticle.url))
             context.startActivity(browserIntent)
         }
-
     }
 
     override fun getItemCount(): Int {
