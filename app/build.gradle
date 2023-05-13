@@ -81,4 +81,7 @@ dependencies {
 
     //Swipe to refresh
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    //Ads
+    implementation 'com.google.android.gms:play-services-ads:22.0.0'
 }

@@ -11,8 +11,13 @@ import androidx.viewpager2.widget.ViewPager2
 import com.abdelrahman.rafaat.news.R
 import com.abdelrahman.rafaat.news.databinding.ActivityMainBinding
 import com.abdelrahman.rafaat.news.ui.setting.SettingActivity
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
+
 
 private const val TAG = "MainActivity"
 
@@ -25,11 +30,74 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initBannerAds()
         binding.navigationView.setNavigationItemSelectedListener(this)
         initDrawerLayout()
         initViewPager()
         initTabLayout()
 
+    }
+
+    private fun initBannerAds() {
+        MobileAds.initialize(this) {
+        }
+
+        val adRequestTop = AdRequest.Builder().build()
+        val adRequestBottom = AdRequest.Builder().build()
+      
+        binding.adBannerViewTop.loadAd(adRequestTop)
+        binding.adBannerViewTop.adListener = object: AdListener() {
+            override fun onAdClicked() {
+                Log.i(TAG, "onAdClicked: ")
+            }
+
+            override fun onAdClosed() {
+                Log.i(TAG, "onAdClosed: ")
+            }
+
+            override fun onAdFailedToLoad(adError : LoadAdError) {
+                Log.i(TAG, "onAdFailedToLoad:adError " + adError.message)
+            }
+
+            override fun onAdImpression() {
+                Log.i(TAG, "onAdImpression: ")
+            }
+
+            override fun onAdLoaded() {
+                Log.i(TAG, "onAdLoaded: ")
+            }
+
+            override fun onAdOpened() {
+                Log.i(TAG, "onAdOpened: ")
+            }
+        }
+
+        binding.adBannerViewBottom.loadAd(adRequestBottom)
+        binding.adBannerViewBottom.adListener = object: AdListener() {
+            override fun onAdClicked() {
+                Log.i(TAG, "onAdClicked: ")
+            }
+
+            override fun onAdClosed() {
+                Log.i(TAG, "onAdClosed: ")
+            }
+
+            override fun onAdFailedToLoad(adError : LoadAdError) {
+                Log.i(TAG, "onAdFailedToLoad:adError " + adError.message)
+            }
+
+            override fun onAdImpression() {
+                Log.i(TAG, "onAdImpression: ")
+            }
+
+            override fun onAdLoaded() {
+                Log.i(TAG, "onAdLoaded: ")
+            }
+
+            override fun onAdOpened() {
+                Log.i(TAG, "onAdOpened: ")
+            }
+        }
     }
 
     private fun initDrawerLayout() {
