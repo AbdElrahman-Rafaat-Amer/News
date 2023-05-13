@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.abdelrahman.rafaat.myapplication'
+    namespace 'com.abdelrahman.rafaat.news'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.abdelrahman.rafaat.myapplication"
+        applicationId "com.abdelrahman.rafaat.news"
         minSdk 23
         targetSdk 33
         versionCode 1
