@@ -51,3 +51,4 @@ google-services.json
 app/upload_certificate.pem
 .idea/misc.xml
 .idea/gradle.xml
+app/release/app-release.aab
