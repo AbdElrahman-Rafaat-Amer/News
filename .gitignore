@@ -53,3 +53,6 @@ app/upload_certificate.pem
 .idea/gradle.xml
 app/release/app-release.aab
 app/src/main/res/values/ads.xml
+.idea/gradle.xml
+.idea/misc.xml
+.idea/vcs.xml
