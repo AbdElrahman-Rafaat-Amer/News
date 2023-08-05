@@ -32,7 +32,7 @@ class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
     private val validNetworks: MutableSet<Network> = HashSet()
 
     private fun checkValidNetworks() {
-        postValue(validNetworks.size > 0)
+        postValue(validNetworks.isNotEmpty())
     }
 
     override fun onActive() {
