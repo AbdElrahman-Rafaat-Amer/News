@@ -10,9 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.abdelrahman.rafaat.news.R
 import com.abdelrahman.rafaat.news.databinding.ActivityMainBinding
 import com.abdelrahman.rafaat.news.ui.setting.SettingActivity
-import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout

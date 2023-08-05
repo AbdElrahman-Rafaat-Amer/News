@@ -1,10 +1,10 @@
 package com.abdelrahman.rafaat.news.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,11 +15,10 @@ import com.abdelrahman.rafaat.news.network.NewsClient
 import com.abdelrahman.rafaat.news.ui.mainscreen.view.NewsRecyclerAdapter
 import com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel.MainActivityFactory
 import com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel.MainActivityViewModel
-import com.abdelrahman.rafaat.news.utils.ConnectionLiveData
 import com.abdelrahman.rafaat.news.utils.connectInternet
 import kotlin.math.round
 
-class SportFragment : Fragment() {
+class SportFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSportBinding
     private val adapter = NewsRecyclerAdapter()
@@ -41,7 +40,6 @@ class SportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        checkConnection()
         initRecyclerView()
         initViewModel()
         observeViewModel()
@@ -53,24 +51,6 @@ class SportFragment : Fragment() {
 
     }
 
-    private fun checkConnection() {
-        ConnectionLiveData.getInstance(requireContext()).observe(viewLifecycleOwner) {
-            if (it) {
-                binding.shimmerAnimationLayout.shimmerFrameLayout.visibility = View.VISIBLE
-                binding.shimmerAnimationLayout.shimmerFrameLayout.startShimmer()
-                binding.connectionLayout.noInternetAnimation.visibility = View.GONE
-                binding.connectionLayout.enableConnection.visibility = View.GONE
-                viewModel.getSport(page)
-            } else {
-                binding.shimmerAnimationLayout.shimmerFrameLayout.visibility = View.GONE
-                binding.shimmerAnimationLayout.shimmerFrameLayout.stopShimmer()
-                binding.connectionLayout.noInternetAnimation.visibility = View.VISIBLE
-                binding.connectionLayout.enableConnection.visibility = View.VISIBLE
-                  binding.swipeRefreshLayout.visibility = View.GONE
-            }
-        }
-    }
-
     private fun initRecyclerView() {
         binding.sportRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.sportRecyclerview.adapter = adapter
@@ -80,6 +60,7 @@ class SportFragment : Fragment() {
                 if (!recyclerView.canScrollVertically(1)) {
                     if (page < pageNumbers && page < 6) {
                         page++
+                        Log.i("NetworkIssue", "SportFragment initRecyclerView:page-----> $page")
                         viewModel.getSport(page)
                     }
                 }
@@ -104,29 +85,52 @@ class SportFragment : Fragment() {
         viewModel.sport.observe(viewLifecycleOwner) {
             if (it.articles.isEmpty()) {
                 binding.sportRecyclerview.visibility = View.GONE
-                  binding.swipeRefreshLayout.visibility = View.GONE
+                binding.swipeRefreshLayout.visibility = View.GONE
                 adapter.setList(emptyList())
                 binding.noDataView.root.visibility = View.VISIBLE
             } else {
                 pageNumbers = round(it.totalResults.toDouble() / 100).toInt()
                 binding.sportRecyclerview.visibility = View.VISIBLE
-                  binding.swipeRefreshLayout.visibility = View.VISIBLE
+                binding.swipeRefreshLayout.visibility = View.VISIBLE
                 adapter.setList(it.articles)
                 binding.noDataView.root.visibility = View.GONE
             }
-              binding.swipeRefreshLayout.isRefreshing = false
+            binding.swipeRefreshLayout.isRefreshing = false
             binding.shimmerAnimationLayout.shimmerFrameLayout.visibility = View.GONE
             binding.shimmerAnimationLayout.shimmerFrameLayout.stopShimmer()
         }
     }
 
     private fun refresh() {
-          binding.swipeRefreshLayout.setOnRefreshListener {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            Log.i("NetworkIssue", "SportFragment refresh:")
             viewModel.getSport(1)
-              binding.swipeRefreshLayout.isRefreshing = true
+            binding.swipeRefreshLayout.isRefreshing = true
         }
-          binding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor, null))
+        binding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor, null))
     }
 
+    override fun onConnected() {
+        super.onConnected()
+        Log.i("NetworkIssue", "SportFragment onConnected:")
+        binding.shimmerAnimationLayout.shimmerFrameLayout.visibility = View.VISIBLE
+        binding.shimmerAnimationLayout.shimmerFrameLayout.startShimmer()
+        binding.connectionLayout.noInternetAnimation.visibility = View.GONE
+        binding.connectionLayout.enableConnection.visibility = View.GONE
+        viewModel.getSport(page)
+
+    }
+
+    override fun onDisconnected() {
+        super.onDisconnected()
+        Log.i("NetworkIssue", "SportFragment onDisconnected:")
+        binding.shimmerAnimationLayout.shimmerFrameLayout.visibility = View.GONE
+        binding.shimmerAnimationLayout.shimmerFrameLayout.stopShimmer()
+        binding.connectionLayout.noInternetAnimation.visibility = View.VISIBLE
+        binding.connectionLayout.enableConnection.visibility = View.VISIBLE
+        binding.swipeRefreshLayout.visibility = View.GONE
+        binding.swipeRefreshLayout.isRefreshing = false
+        binding.sportRecyclerview.visibility = View.GONE
+    }
 
 }

@@ -1,11 +1,11 @@
 package com.abdelrahman.rafaat.news.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +16,6 @@ import com.abdelrahman.rafaat.news.network.NewsClient
 import com.abdelrahman.rafaat.news.ui.mainscreen.view.NewsRecyclerAdapter
 import com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel.MainActivityFactory
 import com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel.MainActivityViewModel
-import com.abdelrahman.rafaat.news.utils.ConnectionLiveData
 import com.abdelrahman.rafaat.news.utils.connectInternet
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -24,7 +23,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.round
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private val adapter = NewsRecyclerAdapter()
@@ -46,7 +45,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        checkConnection()
         initRecyclerView()
         initViewModel()
         observeViewModel()
@@ -59,35 +57,17 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun checkConnection() {
-        ConnectionLiveData.getInstance(requireContext()).observe(viewLifecycleOwner) {
-            if (it) {
-                binding.shimmerAnimationLayout.shimmerFrameLayout.visibility = View.VISIBLE
-                binding.shimmerAnimationLayout.shimmerFrameLayout.startShimmer()
-                binding.connectionLayout.noInternetAnimation.visibility = View.GONE
-                binding.connectionLayout.enableConnection.visibility = View.GONE
-                viewModel.getNews(page)
-            } else {
-                binding.shimmerAnimationLayout.shimmerFrameLayout.visibility = View.GONE
-                binding.shimmerAnimationLayout.shimmerFrameLayout.stopShimmer()
-                binding.connectionLayout.noInternetAnimation.visibility = View.VISIBLE
-                binding.connectionLayout.enableConnection.visibility = View.VISIBLE
-                binding.swipeRefreshLayout.visibility = View.GONE
-                binding.searchView.visibility = View.GONE
-            }
-        }
-    }
-
     private fun initRecyclerView() {
-         binding.homeRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-         binding.homeRecyclerview.adapter = adapter
+        binding.homeRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        binding.homeRecyclerview.adapter = adapter
 
-         binding.homeRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.homeRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
                     if (page < pageNumbers && page < 6) {
                         page++
+                        Log.i("NetworkIssue", "HomeFragment onScrollStateChanged: page---->${page}")
                         viewModel.getNews(page)
                     }
                 }
@@ -111,14 +91,14 @@ class HomeFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.news.observe(viewLifecycleOwner) {
             if (it.articles.isEmpty()) {
-                 binding.homeRecyclerview.visibility = View.GONE
+                binding.homeRecyclerview.visibility = View.GONE
                 adapter.setList(emptyList())
-                 binding.noDataView.root.visibility = View.VISIBLE
+                binding.noDataView.root.visibility = View.VISIBLE
             } else {
                 pageNumbers = round(it.totalResults.toDouble() / 100).toInt()
-                 binding.homeRecyclerview.visibility = View.VISIBLE
+                binding.homeRecyclerview.visibility = View.VISIBLE
                 adapter.setList(it.articles)
-                 binding.noDataView.root.visibility = View.GONE
+                binding.noDataView.root.visibility = View.GONE
             }
             binding.swipeRefreshLayout.visibility = View.VISIBLE
             binding.searchView.visibility = View.VISIBLE
@@ -130,6 +110,7 @@ class HomeFragment : Fragment() {
 
     private fun refresh() {
         binding.swipeRefreshLayout.setOnRefreshListener {
+            Log.i("NetworkIssue", "HomeFragment refresh:")
             viewModel.getNews(1)
             binding.swipeRefreshLayout.isRefreshing = true
         }
@@ -145,20 +126,46 @@ class HomeFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                Log.i("NetworkIssue", "HomeFragment onQueryTextChange:newText----->$newText")
                 job?.cancel()
-                job = MainScope().launch {
-                    delay(500L)
-                    if (newText!!.isNotEmpty()) {
-                        viewModel.getNewsBySearch(
-                            page, newText
-                        )
-                    } else {
-                        viewModel.getNews(page)
+                if (isInternetConnected){
+                    job = MainScope().launch {
+                        delay(500L)
+                        if (newText!!.isNotEmpty()) {
+                            viewModel.getNewsBySearch(page, newText)
+                        } else {
+                            Log.i("NetworkIssue", "HomeFragment onQueryTextChange:")
+                            viewModel.getNews(page)
+                        }
                     }
                 }
+
                 return false
             }
 
         })
+    }
+
+    override fun onConnected() {
+        super.onConnected()
+        Log.i("NetworkIssue", "HomeFragment onConnected: ")
+        binding.shimmerAnimationLayout.shimmerFrameLayout.visibility = View.VISIBLE
+        binding.shimmerAnimationLayout.shimmerFrameLayout.startShimmer()
+        binding.connectionLayout.noInternetAnimation.visibility = View.GONE
+        binding.connectionLayout.enableConnection.visibility = View.GONE
+        viewModel.getNews(page)
+    }
+
+    override fun onDisconnected() {
+        super.onDisconnected()
+        Log.i("NetworkIssue", "HomeFragment onDisconnected: ")
+        binding.shimmerAnimationLayout.shimmerFrameLayout.visibility = View.GONE
+        binding.shimmerAnimationLayout.shimmerFrameLayout.stopShimmer()
+        binding.connectionLayout.noInternetAnimation.visibility = View.VISIBLE
+        binding.connectionLayout.enableConnection.visibility = View.VISIBLE
+        binding.swipeRefreshLayout.visibility = View.GONE
+        binding.swipeRefreshLayout.isRefreshing = false
+        binding.homeRecyclerview.visibility = View.GONE
+        binding.searchView.visibility = View.GONE
     }
 }
