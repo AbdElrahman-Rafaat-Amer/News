@@ -2,7 +2,6 @@ package com.abdelrahman.rafaat.news.ui.mainscreen.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -42,24 +41,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val adRequestBottom = AdRequest.Builder().build()
 
         binding.adBannerViewTop.loadAd(adRequestTop)
-        binding.adBannerViewTop.adListener = object : AdListener() {
-            override fun onAdClicked() {}
-            override fun onAdClosed() {}
-            override fun onAdFailedToLoad(adError: LoadAdError) {}
-            override fun onAdImpression() {}
-            override fun onAdLoaded() {}
-            override fun onAdOpened() {}
-        }
 
         binding.adBannerViewBottom.loadAd(adRequestBottom)
-        binding.adBannerViewBottom.adListener = object : AdListener() {
-            override fun onAdClicked() {}
-            override fun onAdClosed() {}
-            override fun onAdFailedToLoad(adError: LoadAdError) {}
-            override fun onAdImpression() {}
-            override fun onAdLoaded() {}
-            override fun onAdOpened() {}
-        }
     }
 
     private fun initDrawerLayout() {
@@ -102,8 +85,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 binding.viewPager.currentItem = tab?.position ?: 0
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+            override fun onTabReselected(tab: TabLayout.Tab?) = Unit
         })
     }
 
