@@ -1,8 +1,8 @@
 package com.abdelrahman.rafaat.news.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.abdelrahman.rafaat.news.R
 import com.abdelrahman.rafaat.news.ui.mainscreen.view.MainActivity
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +19,7 @@ class SplashActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             delay(5000)
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            finish()
         }
 
     }
