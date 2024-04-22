@@ -11,13 +11,12 @@ class NewsClient private constructor() : RemoteSource {
         country: String, category: String, sortBy: String, page: Int
     ): Response<NewsModel> {
 
-        val response = newsHelper.getNewsBYCountry(
+        return newsHelper.getNewsBYCountry(
             country = country,
             category = category,
             sortBy = sortBy,
             page = page.toString()
         )
-        return response
     }
 
 
@@ -26,13 +25,11 @@ class NewsClient private constructor() : RemoteSource {
         sortBy: String,
         page: Int
     ): Response<NewsModel> {
-        val response =
-            newsHelper.getNews(
-                q = searchTopic,
-                sortBy = sortBy,
-                page = page.toString()
-            )
-        return response
+        return newsHelper.getNews(
+            q = searchTopic,
+            sortBy = sortBy,
+            page = page.toString()
+        )
     }
 
     companion object {
