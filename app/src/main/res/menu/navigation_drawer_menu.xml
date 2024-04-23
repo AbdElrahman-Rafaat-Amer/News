@@ -39,4 +39,9 @@
         android:icon="@drawable/settings"
         android:title="@string/setting" />
 
+    <item
+        android:id="@+id/saved_news"
+        android:icon="@drawable/saved_news"
+        android:title="@string/saved_news" />
+
 </menu>

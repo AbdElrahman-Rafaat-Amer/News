@@ -7,6 +7,7 @@
     <string name="health"> Health</string>
     <string name="business">Business</string>
     <string name="entertainment"> Entertainment</string>
+    <string name="saved_news">Saved News</string>
     <string name="search_now">enter your keywords</string>
     <string name="news_image">News Image</string>
     <string name="source_name">source name</string>

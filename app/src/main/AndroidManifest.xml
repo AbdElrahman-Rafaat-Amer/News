@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.abdelrahman.rafaat.news">
+    package="com.abdelrahman.rafaat.news" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,25 +13,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.News">
-
+        <activity
+            android:name=".ui.savednews.SavedNewsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.News" />
         <activity
             android:name=".ui.setting.SettingActivity"
             android:exported="false"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.mainscreen.view.MainActivity"
             android:exported="false"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.SplashActivity"
             android:exported="true"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
-            android:theme="@style/noActionBar">
+            android:theme="@style/noActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.abdelrahman.rafaat.news.R
 import com.abdelrahman.rafaat.news.databinding.ActivityMainBinding
+import com.abdelrahman.rafaat.news.ui.savednews.SavedNewsActivity
 import com.abdelrahman.rafaat.news.ui.setting.SettingActivity
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.business -> binding.viewPager.currentItem = 4
             R.id.entertainment -> binding.viewPager.currentItem = 5
             R.id.setting -> startActivity(Intent(this, SettingActivity::class.java))
+            R.id.saved_news -> startActivity(Intent(this, SavedNewsActivity::class.java))
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
