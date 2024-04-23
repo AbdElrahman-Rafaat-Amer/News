@@ -18,14 +18,16 @@ open class BaseFragment : Fragment() {
 
     private fun checkConnection() {
         ConnectionLiveData.getInstance(requireContext()).observe(viewLifecycleOwner) {
-            isInternetConnected = it
-            if (it) {
-                Log.i("NetworkIssue", "BaseFragment checkConnection: ")
-                onConnected()
+            if (isInternetConnected != it) {
+                isInternetConnected = it
+                if (it) {
+                    Log.i("NetworkIssue", "BaseFragment checkConnection: ")
+                    onConnected()
 
-            } else {
-                Log.i("NetworkIssue", "BaseFragment checkConnection: ")
-                onDisconnected()
+                } else {
+                    Log.i("NetworkIssue", "BaseFragment checkConnection: ")
+                    onDisconnected()
+                }
             }
         }
     }
