@@ -1,5 +1,7 @@
 package com.abdelrahman.rafaat.news.ui.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abdelrahman.rafaat.news.R
 import com.abdelrahman.rafaat.news.databinding.FragmentHomeBinding
+import com.abdelrahman.rafaat.news.localdatabase.LocalSource
+import com.abdelrahman.rafaat.news.model.Article
 import com.abdelrahman.rafaat.news.model.Repository
 import com.abdelrahman.rafaat.news.network.NewsClient
 import com.abdelrahman.rafaat.news.ui.mainscreen.view.NewsRecyclerAdapter
@@ -26,7 +30,11 @@ import kotlin.math.round
 class HomeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private val adapter = NewsRecyclerAdapter()
+    private val adapter = NewsRecyclerAdapter(onItemClicked = { url ->
+        handleOnItemClicked(url)
+    }, onItemLongClicked = { article ->
+        handleOnItemLongClicked(article)
+    })
 
     private lateinit var viewModelFactory: MainActivityFactory
     private lateinit var viewModel: MainActivityViewModel
@@ -78,7 +86,9 @@ class HomeFragment : BaseFragment() {
     private fun initViewModel() {
         viewModelFactory = MainActivityFactory(
             Repository.getNewsClient(
-                NewsClient.getNewsClient(), requireActivity().application
+                NewsClient.getNewsClient(),
+                LocalSource.getInstance(requireContext()),
+                requireActivity().application
             ), requireActivity().application
         )
 
@@ -128,7 +138,7 @@ class HomeFragment : BaseFragment() {
             override fun onQueryTextChange(newText: String?): Boolean {
                 Log.i("NetworkIssue", "HomeFragment onQueryTextChange:newText----->$newText")
                 job?.cancel()
-                if (isInternetConnected){
+                if (isInternetConnected) {
                     job = MainScope().launch {
                         delay(500L)
                         if (newText!!.isNotEmpty()) {
@@ -144,6 +154,15 @@ class HomeFragment : BaseFragment() {
             }
 
         })
+    }
+
+    private fun handleOnItemLongClicked(article: Article) {
+        viewModel.saveNews(article)
+    }
+
+    private fun handleOnItemClicked(url: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        context?.startActivity(browserIntent)
     }
 
     override fun onConnected() {

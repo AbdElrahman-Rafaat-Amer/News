@@ -1,7 +1,10 @@
 package com.abdelrahman.rafaat.news.localdatabase
 
-import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
 interface NewsDao {
@@ -10,8 +13,8 @@ interface NewsDao {
     fun insertNews(news: NewsEntity)
 
     @Query("SELECT * FROM News_Table")
-    fun getNewsFromDatabase(): LiveData<List<NewsEntity>>
+    fun getNewsFromDatabase(): List<NewsEntity>
 
     @Delete
-    fun deleteNews(news: NewsEntity)
+    fun deleteNews(news: NewsEntity): Int
 }

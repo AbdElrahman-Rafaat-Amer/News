@@ -5,12 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.abdelrahman.rafaat.news.model.*
+import com.abdelrahman.rafaat.news.model.Article
+import com.abdelrahman.rafaat.news.model.NewsModel
+import com.abdelrahman.rafaat.news.model.RepositoryInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainActivityViewModel(private val _iRepo: RepositoryInterface, var application: Application) : ViewModel() {
+
+class MainActivityViewModel(private val _iRepo: RepositoryInterface, var application: Application) :
+    ViewModel() {
     private var _news = MutableLiveData<NewsModel>()
     val news: LiveData<NewsModel> = _news
 
@@ -28,6 +32,9 @@ class MainActivityViewModel(private val _iRepo: RepositoryInterface, var applica
 
     private var _entertainment = MutableLiveData<NewsModel>()
     val entertainment: LiveData<NewsModel> = _entertainment
+
+    private var _savedNews = MutableLiveData<List<Article>>()
+    val savedNews: LiveData<List<Article>> = _savedNews
 
     fun getNewsBySearch(page: Int, searchTopic: String) {
         viewModelScope.launch {
@@ -125,5 +132,36 @@ class MainActivityViewModel(private val _iRepo: RepositoryInterface, var applica
             }
         }
 
+    }
+
+    fun saveNews(article: Article) {
+        viewModelScope.launch {
+            executeIOOperation {
+                _iRepo.saveNews(article)
+            }
+        }
+    }
+
+    fun getAllSavedNews() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val savedNews = _iRepo.getSavedNews()
+                _savedNews.postValue(savedNews)
+            }
+        }
+    }
+
+    fun deleteNews(article: Article) {
+        viewModelScope.launch {
+            executeIOOperation {
+                _iRepo.deleteNews(article)
+            }
+        }
+    }
+
+    private suspend fun executeIOOperation(ioOperation: suspend () -> Unit) {
+        withContext(Dispatchers.IO) {
+            ioOperation()
+        }
     }
 }

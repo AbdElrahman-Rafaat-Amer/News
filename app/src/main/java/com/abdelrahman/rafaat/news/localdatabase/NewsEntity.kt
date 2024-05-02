@@ -7,21 +7,13 @@ import androidx.room.PrimaryKey
 data class NewsEntity(
 
     @PrimaryKey(autoGenerate = false)
-    val id: Int = 0,
+    val url: String,
 
-    val title: String = "",
+    val title: String,
 
-    val imageURL: String = "",
+    val imageURL: String,
 
-    val description: String = "",
+    val description: String,
 
-    val url: String = "",
-
-    val source: String = "",
-
-    val publishedAt: String = "",
-
-    val content: String = "",
-
-    val author: String = ""
+    val publishedAt: String
 )

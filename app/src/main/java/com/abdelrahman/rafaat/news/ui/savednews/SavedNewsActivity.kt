@@ -5,11 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,43 +15,74 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import com.abdelrahman.rafaat.news.R
+import com.abdelrahman.rafaat.news.localdatabase.LocalSource
 import com.abdelrahman.rafaat.news.localdatabase.NewsEntity
+import com.abdelrahman.rafaat.news.model.Article
+import com.abdelrahman.rafaat.news.model.Repository
+import com.abdelrahman.rafaat.news.network.NewsClient
+import com.abdelrahman.rafaat.news.ui.composeui.RoundedCornerImage
+import com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel.MainActivityFactory
+import com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel.MainActivityViewModel
+import com.abdelrahman.rafaat.news.utils.NewsMapper
 
 class SavedNewsActivity : ComponentActivity() {
+
+    private lateinit var viewModel: MainActivityViewModel
+    private val savedNewsList = mutableStateListOf<Article>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initViewModel()
+        observeViewModel()
+        viewModel.getAllSavedNews()
         setContent {
             SavedNews(
-                listOf(
-                    NewsEntity(title = "A", description = "Amer", publishedAt = "3-5-2022"),
-                    NewsEntity(title = "B", description = "Amer", publishedAt = "3-5-2022"),
-                    NewsEntity(title = "C", description = "Amer", publishedAt = "3-5-2022"),
-                    NewsEntity(title = "D", description = "Amer", publishedAt = "3-5-2022"),
-                    NewsEntity(title = "E", description = "Amer", publishedAt = "3-5-2022"),
-                    NewsEntity(title = "F", description = "Amer", publishedAt = "3-5-2022")
-                )
+                savedNewsList
             )
+        }
+    }
+
+    private fun initViewModel() {
+        val viewModelFactory = MainActivityFactory(
+            Repository.getNewsClient(
+                NewsClient.getNewsClient(),
+                LocalSource.getInstance(this),
+                this.application
+            ), this.application
+        )
+
+        viewModel = ViewModelProvider(
+            this,
+            viewModelFactory
+        )[MainActivityViewModel::class.java]
+    }
+
+    private fun observeViewModel() {
+        viewModel.savedNews.observe(this) {
+            savedNewsList.clear()
+            if (it.isNotEmpty()) {
+                savedNewsList.addAll(it)
+            }
+
         }
     }
 }
 
 @Composable
-fun SavedNews(newsList: List<NewsEntity>) {
+fun SavedNews(newsList: List<Article>) {
     LazyColumn {
         items(newsList) { news ->
             NewsCard(news = news)
@@ -62,37 +91,50 @@ fun SavedNews(newsList: List<NewsEntity>) {
 }
 
 @Composable
-fun NewsCard(news: NewsEntity) {
+fun NewsCard(news: Article) {
     Surface(
         shape = MaterialTheme.shapes.small,
         shadowElevation = 1.dp,
+        modifier = Modifier
+            .padding(
+                horizontal = 7.dp,
+                vertical = 4.dp
+            )
     ) {
-        Row(modifier = Modifier.padding(3.dp)) {
+        Row(
+            modifier = Modifier
+                .background(Color(0xFFEBE7E7))
+        ) {
             RoundedCornerImage(
-                painter = painterResource(id = R.drawable.entertainment),
-                contentDescription = "news image",
                 modifier = Modifier
                     .size(80.dp)
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.CenterVertically),
+                imageURL = news.urlToImage,
+                contentDescription = null
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
             Column(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
+                    .fillMaxWidth()
+                    .padding(end = 7.dp, bottom = 7.dp)
             ) {
                 Text(
                     text = news.title,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 2
+
                 )
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
                     text = news.description,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 3
                 )
-                Spacer(modifier = Modifier.height(2.dp))
+                Spacer(modifier = Modifier.height(9.dp))
 
                 Row(
                     modifier = Modifier
@@ -113,41 +155,48 @@ fun NewsCard(news: NewsEntity) {
     }
 }
 
-@Composable
-fun RoundedCornerImage(
-    painter: Painter,
-    contentDescription: String?,
-    modifier: Modifier = Modifier,
-    cornerRadius: Float = 20.dp.value // Adjust the corner radius as needed
-) {
-    Box(
-        modifier = modifier
-            .size(90.dp)
-            .clip(RoundedCornerShape(cornerRadius))
-            .background(Color.Gray)// Clip with rounded corners
-    ) {
-        Image(
-            painter = painter,
-            contentDescription = contentDescription,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            contentScale = ContentScale.Crop
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun SavedNewsPreview() {
     SavedNews(
-        listOf(
-            NewsEntity(title = "A", description = "Amer", publishedAt = "3-5-2022"),
-            NewsEntity(title = "B", description = "Amer", publishedAt = "3-5-2022"),
-            NewsEntity(title = "C", description = "Amer", publishedAt = "3-5-2022"),
-            NewsEntity(title = "D", description = "Amer", publishedAt = "3-5-2022"),
-            NewsEntity(title = "E", description = "Amer", publishedAt = "3-5-2022"),
-            NewsEntity(title = "F", description = "Amer", publishedAt = "3-5-2022")
+        NewsMapper.fromEntityList(
+            listOf(
+                NewsEntity(
+                    title = "Binance founder Changpeng Zhao sentenced to 4 months for allowing money laundering - The Associated Press",
+                    description = "Former Binance CEO Changpeng Zhao has been sentenced to four months in prison for allowing rampant money laundering on the world’s largest cryptocurrency exchange. A judge on Tuesday credited Zhao for taking responsibility for his wrongdoing. But he said he w…",
+                    publishedAt = "3-5-2022",
+                    url = "",
+                    imageURL = "",
+                ),
+                NewsEntity(
+                    title = "F",
+                    description = "Amer",
+                    publishedAt = "3-5-2022",
+                    url = "",
+                    imageURL = "",
+                ),
+                NewsEntity(
+                    title = "F",
+                    description = "Amer",
+                    publishedAt = "3-5-2022",
+                    url = "",
+                    imageURL = ""
+                ),
+                NewsEntity(
+                    title = "F",
+                    description = "Amer",
+                    publishedAt = "3-5-2022",
+                    url = "",
+                    imageURL = ""
+                ),
+                NewsEntity(
+                    title = "F",
+                    description = "Amer",
+                    publishedAt = "3-5-2022",
+                    url = "",
+                    imageURL = ""
+                )
+            )
         )
     )
 }
