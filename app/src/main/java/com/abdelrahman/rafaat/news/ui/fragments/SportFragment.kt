@@ -1,5 +1,7 @@
 package com.abdelrahman.rafaat.news.ui.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,18 +12,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abdelrahman.rafaat.news.R
 import com.abdelrahman.rafaat.news.databinding.FragmentSportBinding
+import com.abdelrahman.rafaat.news.localdatabase.LocalSource
+import com.abdelrahman.rafaat.news.model.Article
 import com.abdelrahman.rafaat.news.model.Repository
 import com.abdelrahman.rafaat.news.network.NewsClient
 import com.abdelrahman.rafaat.news.ui.mainscreen.view.NewsRecyclerAdapter
 import com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel.MainActivityFactory
 import com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel.MainActivityViewModel
 import com.abdelrahman.rafaat.news.utils.connectInternet
+import kotlinx.coroutines.handleCoroutineException
 import kotlin.math.round
 
 class SportFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSportBinding
-    private val adapter = NewsRecyclerAdapter()
+    private val adapter = NewsRecyclerAdapter(onItemClicked = { url ->
+        handleOnItemClicked(url)
+    }, onItemLongClicked = { article ->
+        handleOnItemLongClicked(article)
+    })
 
     private lateinit var viewModelFactory: MainActivityFactory
     private lateinit var viewModel: MainActivityViewModel
@@ -30,8 +39,7 @@ class SportFragment : BaseFragment() {
     private var pageNumbers: Int = 0
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentSportBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -71,13 +79,14 @@ class SportFragment : BaseFragment() {
     private fun initViewModel() {
         viewModelFactory = MainActivityFactory(
             Repository.getNewsClient(
-                NewsClient.getNewsClient(), requireActivity().application
+                NewsClient.getNewsClient(),
+                LocalSource.getInstance(requireContext()),
+                requireActivity().application
             ), requireActivity().application
         )
 
         viewModel = ViewModelProvider(
-            requireActivity(),
-            viewModelFactory
+            requireActivity(), viewModelFactory
         )[MainActivityViewModel::class.java]
     }
 
@@ -108,6 +117,15 @@ class SportFragment : BaseFragment() {
             binding.swipeRefreshLayout.isRefreshing = true
         }
         binding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.mainColor, null))
+    }
+
+    private fun handleOnItemLongClicked(article: Article) {
+        viewModel.saveNews(article)
+    }
+
+    private fun handleOnItemClicked(url: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        context?.startActivity(browserIntent)
     }
 
     override fun onConnected() {

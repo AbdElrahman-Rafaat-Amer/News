@@ -13,7 +13,11 @@ import com.abdelrahman.rafaat.news.R
 import com.abdelrahman.rafaat.news.model.Article
 import com.bumptech.glide.Glide
 
-class NewsRecyclerAdapter : RecyclerView.Adapter<NewsRecyclerAdapter.ViewHolder>() {
+class NewsRecyclerAdapter(
+    val onItemClicked: (url: String) -> Unit,
+    val onItemLongClicked: (article: Article) -> Unit
+) :
+    RecyclerView.Adapter<NewsRecyclerAdapter.ViewHolder>() {
 
     private var homeNews: List<Article> = emptyList()
     private lateinit var context: Context
@@ -44,8 +48,12 @@ class NewsRecyclerAdapter : RecyclerView.Adapter<NewsRecyclerAdapter.ViewHolder>
         holder.descriptionTextview.text = currentArticle.description
 
         holder.itemView.setOnClickListener {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(currentArticle.url))
-            context.startActivity(browserIntent)
+            onItemClicked(currentArticle.url)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            onItemLongClicked(currentArticle)
+            true
         }
     }
 
