@@ -19,6 +19,7 @@ import com.abdelrahman.rafaat.news.network.NewsClient
 import com.abdelrahman.rafaat.news.ui.mainscreen.view.NewsRecyclerAdapter
 import com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel.MainActivityFactory
 import com.abdelrahman.rafaat.news.ui.mainscreen.viewmodel.MainActivityViewModel
+import com.abdelrahman.rafaat.news.ui.readnews.ReadNewsActivity
 import com.abdelrahman.rafaat.news.utils.connectInternet
 import kotlin.math.round
 
@@ -126,8 +127,9 @@ class BusinessFragment : BaseFragment() {
     }
 
     private fun handleOnItemClicked(url: String) {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        context?.startActivity(browserIntent)
+        val intent = Intent(context, ReadNewsActivity::class.java)
+        intent.putExtra("NEWS_URL", url)
+        context?.startActivity(intent)
     }
 
     override fun onConnected() {

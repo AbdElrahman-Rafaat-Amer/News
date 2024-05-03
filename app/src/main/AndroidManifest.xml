@@ -15,6 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.News">
         <activity
+            android:name=".ui.readnews.ReadNewsActivity"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.News" />
+        <activity
             android:name=".ui.savednews.SavedNewsActivity"
             android:exported="false"
             android:theme="@style/Theme.News" />
