@@ -56,3 +56,4 @@ app/src/main/res/values/ads.xml
 .idea/gradle.xml
 .idea/misc.xml
 .idea/vcs.xml
+app/src/main/res/values/ads_ids.xml

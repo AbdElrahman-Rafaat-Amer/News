@@ -24,6 +24,10 @@
     <string name="news_ranking">ترتيب الأخبار</string>
     <string name="country_language">اللغة والمنطقة</string>
 
+    <string name="contact_us">تواصل معنا</string>
+    <string name="get_in_touch">ابقى على تواصل</string>
+    <string name="get_in_touch_desc">إذا كان لديك أي استفسارات، تواصل معنا.\nسنكون سعداء بمساعدتك.</string>
+    <string name="social_media">وسائل التواصل الاجتماعي</string>
     <string-array name = "news_ranking">
         <item> الاحدث </item>
         <item> الصلة </item>
