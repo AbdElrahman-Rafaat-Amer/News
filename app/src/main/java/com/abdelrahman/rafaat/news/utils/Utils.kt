@@ -12,5 +12,3 @@ fun connectInternet(context: Context) {
         context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
     }
 }
-
-const val NEWS_API_KEY = ""

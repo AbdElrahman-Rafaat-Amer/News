@@ -39,6 +39,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.ContactUsActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/ads_application_id" />
