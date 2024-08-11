@@ -21,9 +21,15 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        //News Key
-        def apiKey = project.findProperty("apiKey") ?: ""
-        buildConfigField("String", "API_KEY", "\"${apiKey}\"")
+
+        def keys = new Properties()
+        file("../local.properties").withInputStream {
+            stream -> keys.load(stream)
+        }
+        buildConfigField "String", "API_KEY", "\"" + keys.NEWS_API_KEY + "\""
+        resValue("string", "admob_app_id",  "\"" + keys.ADMOB_APP_ID + "\"")
+        resValue("string", "admob_banner_id",  "\"" + keys.ADMOB_AD_BANNER_ID + "\"")
+        resValue("string", "admob_banner_setting_id",  "\"" + keys.ADMOB_AD_BANNER_SETTING_ID + "\"")
     }
 
     buildTypes {

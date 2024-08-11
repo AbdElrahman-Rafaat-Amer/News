@@ -47,7 +47,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/ads_application_id" />
+            android:value="@string/admob_app_id" />
 
         <property
             android:name="android.adservices.AD_SERVICES_CONFIG"

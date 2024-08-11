@@ -23,6 +23,6 @@ interface NewsService {
         @Query("q") q: String,
         @Query("sortBy") sortBy: String = "publishedAt",
         @Query("page") page: String = "1",
-        @Query("apiKey") apiKey: String =  BuildConfig.API_KEY
+        @Query("apiKey") apiKey: String = BuildConfig.API_KEY
     ): Response<NewsModel>
 }
