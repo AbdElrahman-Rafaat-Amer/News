@@ -26,6 +26,10 @@ public class ContactUsActivity extends AppCompatActivity {
 
         binding.gmailTextView.setOnClickListener(v -> openGmail());
 
+        binding.websiteTextView.setOnClickListener(v ->
+                openLink(getString(R.string.website_link))
+        );
+
         binding.telegramTextView.setOnClickListener(v ->
                 openLink(getString(R.string.telegram_link))
         );

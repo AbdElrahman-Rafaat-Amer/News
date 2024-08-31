@@ -50,6 +50,20 @@
 
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/websiteTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_contact_us_row"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/web_site"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/getInTouchDescTextView"
+            app:layout_constraintWidth_percent="0.8" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/telegramTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -61,7 +75,7 @@
             android:text="@string/telegram_user_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/getInTouchDescTextView"
+            app:layout_constraintTop_toBottomOf="@+id/websiteTextView"
             app:layout_constraintWidth_percent="0.8" />
 
         <androidx.appcompat.widget.AppCompatTextView
